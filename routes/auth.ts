@@ -2,7 +2,7 @@ import express, { Router, Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import createJWT, { decodeJWT } from '../utils/jwt'
 import HttpResponse from '../utils/http'
-import { createUser, getAndVerifyUser, getUser } from '../db/controllers/user'
+import { createUser, getAndVerifyUser, getUser, getUserByAccessToken, updateUser } from '../db/controllers/user'
 import { SqlSchema } from '~/types/sql'
 import { BCRYPT_SALT_ROUNDS } from '../db/utils/constants'
 
@@ -27,9 +27,8 @@ router.post('/login', async function(req: Request, res: Response, next: Function
 
 /* POST Verify */
 router.post('/verify', async function(req: Request, res: Response, next: Function): Promise<void> {
+  const token = req.headers.authorization
   try {
-    const token = req.headers.authorization
-
     // decrypt token and verify
     if(token) {
       const verifyTokenResult: boolean = decodeJWT(token, 'qapi')
@@ -43,7 +42,26 @@ router.post('/verify', async function(req: Request, res: Response, next: Functio
     }
   } catch(e) {
     console.log(e.message)
-    res.send(new HttpResponse(403, e.message))
+    if(Number(e.message) === 401 && token) {
+      const user = await getUserByAccessToken(token)
+      if(user && user.length) {
+        const { email, id } = user[0]
+        // create tokens
+        const identifier = 'qapi-refresh' + email
+        // const refreshToken = await createJWT(identifier)
+        const accessToken = await createJWT('qapi', identifier)
+        if(accessToken) {
+          const updatedUser = await updateUser(id, 'accessToken', accessToken)
+          if(updatedUser && updatedUser.length) {
+            res.send(new HttpResponse(200, 'success', { t: updatedUser[0].access_token }))
+          }
+        }
+      } else {
+        res.send(new HttpResponse(403, e.message))
+      }
+    } else {
+      res.send(new HttpResponse(403, e.message))
+    }
   }
 })
 

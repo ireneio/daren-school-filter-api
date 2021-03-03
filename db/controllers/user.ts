@@ -70,6 +70,28 @@ export async function getUser(email: string): Promise<Array<SqlSchema.UserInput>
   }
 }
 
+export async function getUserByAccessToken(token: string): Promise<Array<SqlSchema.UserInput> | false> {
+  const sql = `
+    SELECT id, email, password, access_token, refresh_token, last_login
+    FROM cmsUsers
+    WHERE access_token = $1
+  `
+
+  try {
+    const { rows } = await client.query(sql, [token])
+    if(isRowsExist(rows)) {
+      console.log('[DB] getUserByAccessToken Success: ')
+      console.log(rows)
+      return rows
+    } else {
+      return false
+    }
+  } catch(e) {
+    console.log('[DB] getUserByAccessToken Error: ' + e.message)
+    return false
+  }
+}
+
 export async function getAndVerifyUser(email: string, password: string): Promise<Array<SqlSchema.UserInput> | false> {
   const sql = `
     SELECT id, email, password, access_token, refresh_token, last_login
@@ -116,6 +138,15 @@ export async function updateUser(id: number, flag: string, value: string): Promi
       sql = `
         UPDATE cmsUsers
         SET email = $2, last_updated = $3
+        WHERE id = $1
+        RETURNING *
+      `
+      const { rows } = await client.query(sql, [id, value, genDateNow()])
+      res = rows
+    } else if(flag === 'accessToken') {
+      sql = `
+        UPDATE cmsUsers
+        SET access_token = $2, last_updated = $3
         WHERE id = $1
         RETURNING *
       `

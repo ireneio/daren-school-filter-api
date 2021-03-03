@@ -6,11 +6,12 @@ import cors from 'cors'
 
 import HttpResponse from './utils/http'
 
+import initLocalPg from './db/local'
+
 import indexRouter from './routes/index'
 import authRouter from './routes/auth'
 import userRouter from './routes/user'
-
-import initLocalPg from './db/local'
+import institutionRouter from './routes/institution'
 
 // connect db
 await initLocalPg()
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', indexRouter)
 app.use('/auth', authRouter)
 app.use('/user', userRouter)
+app.use('/institution', institutionRouter)
 
 // 403 all other routes
 app.use('*', function(req: Request, res: Response, next: Function): void {

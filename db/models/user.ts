@@ -8,7 +8,7 @@ export async function createUserTable(): Promise<void | false> {
       password text NOT NULL,
       access_token text NOT NULL,
       refresh_token text NOT NULL,
-      created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
