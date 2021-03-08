@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from 'express'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import createJWT, { decodeJWT } from '../utils/jwt'
 import HttpResponse from '../utils/http'
 import { createUser, getAndVerifyUser, getUser, getUserByAccessToken, updateUser } from '../db/controllers/user'

@@ -7,7 +7,7 @@
     "dev": "cross-env PG_CONNSTR=postgres://ztcseirs:CVPGGrSB8E6fbRkju2gavpHSzphMpUnA@drona.db.elephantsql.com:5432/ztcseirs NODE_APP_CORS_URL=http://localhost:3000 nodemon --exec babel-node ./dist/app.bundle.js",
     "build:dev": "webpack-cli --config webpack.config.cjs -w --progress --color",
     "build:prod": "webpack --config webpack.config.cjs --progress --color",
-    "docker:dev": "bash ./docker-build-run.sh",
+    "docker:dev": "bash ./docker-build-run.sh institution-erp-api Dockerfile.dev",
     "docker:hub": "bash ./docker-build-push.sh",
     "azure": "bash ./azure-deploy.sh",
     "pg:trans": "cross-env PG_CONNSTR=postgres://ztcseirs:CVPGGrSB8E6fbRkju2gavpHSzphMpUnA@drona.db.elephantsql.com:5432/ztcseirs babel-node ./dist/pgTrans.bundle.js"
@@ -21,7 +21,7 @@
     "babel-loader": "^8.2.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "bcrypt": "^5.0.0",
+    "bcryptjs": "^2.4.3",
     "chalk": "^4.1.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
@@ -39,7 +39,7 @@
     "ws": "^7.4.2"
   },
   "devDependencies": {
-    "@types/bcrypt": "^3.0.0",
+    "@types/bcryptjs": "^2.4.2",
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.9",
     "@types/express": "^4.17.11",

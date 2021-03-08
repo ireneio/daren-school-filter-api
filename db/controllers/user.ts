@@ -1,6 +1,6 @@
 import { client } from '../local'
 import { BCRYPT_SALT_ROUNDS } from '../utils/constants'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { isRowsExist, genDateNow } from '../utils/helpers'
 import { SqlSchema } from '../../types/sql'
 

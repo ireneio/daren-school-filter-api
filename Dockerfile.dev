@@ -6,14 +6,10 @@ COPY . .
 
 ENV NODE_ENV=production
 ENV NODE_APP_CORS_URL=https://institution-erp.azurewebsites.net
-ENV NODE_APP_DB_USERNAME=1
-ENV NODE_APP_DB_PW=2
-ENV NODE_APP_DB_SERVER=3
-ENV NODE_APP_DB_DB=4
-ENV PG_CONNSTR=postgres://agjjremw:vwSHOh00HFUE3X0Oi03BQUZQT1x7dRxt@satao.db.elephantsql.com:5432/agjjremw
+ENV PG_CONNSTR=postgres://ztcseirs:CVPGGrSB8E6fbRkju2gavpHSzphMpUnA@drona.db.elephantsql.com:5432/ztcseirs
 
-RUN npm install --production && npm run build:prod
+RUN npm install && npm run build:prod
 
-EXPOSE 3000
+EXPOSE 8081
 
 CMD [ "npm", "start" ]
